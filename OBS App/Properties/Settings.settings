@@ -14,5 +14,14 @@
     <Setting Name="AutoReconnect" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="IsHttpEnabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="HttpHost" Type="System.String" Scope="User">
+      <Value Profile="(Default)">localhost</Value>
+    </Setting>
+    <Setting Name="HttpPort" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">8888</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

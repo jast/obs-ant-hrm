@@ -9,20 +9,20 @@
 //------------------------------------------------------------------------------
 
 namespace ObsHeartRateMonitor.Properties {
-    
-    
+
+
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.0.3.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.2.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
-        
+
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-        
+
         public static Settings Default {
             get {
                 return defaultInstance;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
@@ -34,7 +34,7 @@ namespace ObsHeartRateMonitor.Properties {
                 this["Sensor"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
@@ -46,7 +46,7 @@ namespace ObsHeartRateMonitor.Properties {
                 this["IsLogEnabled"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("9")]
@@ -58,7 +58,7 @@ namespace ObsHeartRateMonitor.Properties {
                 this["LogRefreshRate"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
@@ -68,6 +68,42 @@ namespace ObsHeartRateMonitor.Properties {
             }
             set {
                 this["AutoReconnect"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsHttpEnabled {
+            get {
+                return ((bool)(this["IsHttpEnabled"]));
+            }
+            set {
+                this["IsHttpEnabled"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("localhost")]
+        public string HttpHost {
+            get {
+                return ((string)(this["HttpHost"]));
+            }
+            set {
+                this["HttpHost"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8888")]
+        public int HttpPort {
+            get {
+                return ((int)(this["HttpPort"]));
+            }
+            set {
+                this["HttpPort"] = value;
             }
         }
     }

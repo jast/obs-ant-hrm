@@ -10,6 +10,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <GroupBox Header="Sensor">
             <Grid Margin="5,5,5,0">
@@ -60,6 +61,25 @@
                         <ComboBoxItem Content="10"/>
                     </ComboBox>
                     <Label Content="Seconds" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="HTTP"  Grid.Row="2" x:Name="GroupBoxHttp">
+            <Grid Margin="0,5,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <CheckBox x:Name="CheckBoxHttpEnabled" Content="HTTP Enabled"/>
+                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                    <Label Content="Host" VerticalAlignment="Center" />
+                    <TextBox x:Name="TextBoxHttpHost" TextAlignment="Center" VerticalAlignment="Center" Width="100" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="2">
+                    <Label Content="Port" VerticalAlignment="Center" />
+                    <TextBox x:Name="TextBoxHttpPort" TextAlignment="Center" VerticalAlignment="Center" Width="50" />
                 </StackPanel>
             </Grid>
         </GroupBox>
