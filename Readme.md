@@ -1,5 +1,5 @@
-﻿# OBS ANT+ Hear Rate Monitor
-> A small tool to display your heart rate in OBS using a ANT+ hear rate sensor.
+﻿# OBS ANT+ Heart Rate Monitor
+> A small tool to display your heart rate in OBS using a ANT+ heart rate sensor.
 
 ## Motivation
 When I was looking up existing solutions I found that they were either very limited to specific sensors or very convoluted by using a phone and a cloud service.\
