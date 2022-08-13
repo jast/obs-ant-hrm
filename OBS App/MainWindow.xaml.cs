@@ -1,6 +1,5 @@
 ﻿using Bluegrams.Application;
 using System;
-using System.Diagnostics;
 using System.Net;
 using System.IO;
 using System.Timers;
@@ -15,19 +14,19 @@ namespace ObsHeartRateMonitor
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly Ant.Dongle antDongle;
-        private readonly Ant.Device.HeartRateMonitor heartRateMonitor;
+        private readonly Ant.Dongle? antDongle;
+        private readonly Ant.Device.HeartRateMonitor? heartRateMonitor;
         private readonly Timer logTimer;
         private int lastLogValue;
-        private static readonly HttpListener httpListener = new HttpListener();
-        private string httpHtml;
-        private string httpJs;
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        private static readonly HttpListener httpListener = new();
+        private string? httpHtml;
+        private string? httpJs;
+        private readonly string appBaseName;
         public MainWindow()
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
-            PortableSettingsProvider.SettingsFileName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name + ".config";
-            PortableSettingsProvider.SettingsDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule!.FileName);
+            appBaseName = System.Reflection.Assembly.GetExecutingAssembly()!.GetName()!.Name!;
+            PortableSettingsProvider.SettingsFileName = appBaseName + ".config";
+            PortableSettingsProvider.SettingsDirectory = Path.GetDirectoryName(Environment.ProcessPath);
             PortableSettingsProvider.ApplyProvider(Properties.Settings.Default);
 
             InitializeComponent();
@@ -53,7 +52,7 @@ namespace ObsHeartRateMonitor
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                Close();
+                Application.Current.Shutdown();
             }
 
             logTimer = new Timer
@@ -71,7 +70,7 @@ namespace ObsHeartRateMonitor
 
         private void ButtonSearch_Click(object sender, RoutedEventArgs e)
         {
-            var searchWindow = new SearchWindow(heartRateMonitor);
+            var searchWindow = new SearchWindow(heartRateMonitor!);
             searchWindow.ShowDialog();
         }
 
@@ -89,7 +88,7 @@ namespace ObsHeartRateMonitor
 
         private void HeartRateMonitor_NewSensorDataReceived(object? sender, EventArgs e)
         {
-            Dispatcher.BeginInvoke(new Action(() => { TextBlockHeartRate.Text = heartRateMonitor.HeartRate.ToString(); }));
+            Dispatcher.BeginInvoke(new Action(() => { TextBlockHeartRate.Text = heartRateMonitor!.HeartRate.ToString(); }));
         }
         private void HeartRateMonitor_SensorNotFound(object? sender, EventArgs e)
         {
@@ -97,12 +96,12 @@ namespace ObsHeartRateMonitor
             Dispatcher.BeginInvoke(new Action(() => { Disconnect(); }));
         }
 
-        private void LogTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private void LogTimer_Elapsed(object? sender, ElapsedEventArgs e)
         {
-            int heartRate = heartRateMonitor.HeartRate;
+            int heartRate = heartRateMonitor!.HeartRate;
             if ((heartRate > 0) && (lastLogValue != heartRate))
             {
-                File.WriteAllText(System.Reflection.Assembly.GetExecutingAssembly().GetName().Name + ".txt", heartRate.ToString());
+                File.WriteAllText(appBaseName + ".txt", heartRate.ToString());
                 lastLogValue = heartRate;
             }
         }
@@ -137,7 +136,7 @@ namespace ObsHeartRateMonitor
             GroupBoxObs.IsEnabled = false;
             GroupBoxHttp.IsEnabled = false;
             CheckBoxReconnect.IsEnabled = false;
-            heartRateMonitor.NewSensorDataReceived += HeartRateMonitor_NewSensorDataReceived;
+            heartRateMonitor!.NewSensorDataReceived += HeartRateMonitor_NewSensorDataReceived;
 
             bool reconnect = CheckBoxReconnect.IsChecked ?? false;
             if (!reconnect)
@@ -164,9 +163,8 @@ namespace ObsHeartRateMonitor
 
             if (CheckBoxHttpEnabled.IsChecked ?? false)
             {
-                var baseName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
-                var htmlFileName = baseName + ".html";
-                var jsFileName = baseName + ".js";
+                var htmlFileName = appBaseName + ".html";
+                var jsFileName = appBaseName + ".js";
                 if (!File.Exists(htmlFileName)) File.WriteAllText(htmlFileName, Properties.Resources.HtmlTemplate);
                 if (!File.Exists(jsFileName)) File.WriteAllText(jsFileName, Properties.Resources.HtmlClientJs);
 
@@ -192,9 +190,7 @@ namespace ObsHeartRateMonitor
                 try
                 {
                     context = await httpListener.GetContextAsync();
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                    Task.Factory.StartNew(() => HttpProcess(context));
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                    await Task.Factory.StartNew(() => HttpProcess(context));
                 }
                 catch (HttpListenerException)
                 {
@@ -210,13 +206,13 @@ namespace ObsHeartRateMonitor
             switch (req.Url?.AbsolutePath ?? "")
             {
                 case "/":
-                    HttpSend(resp, "text/html", httpHtml);
+                    HttpSend(resp, "text/html", httpHtml!);
                     break;
                 case "/client.js":
-                    HttpSend(resp, "application/javascript", httpJs);
+                    HttpSend(resp, "application/javascript", httpJs!);
                     break;
                 case "/data":
-                    string heartRate = heartRateMonitor.HeartRate.ToString();
+                    string heartRate = heartRateMonitor!.HeartRate.ToString();
                     if (heartRate == "-1") heartRate = "\"?\"";
                     HttpSend(resp, "application/json", "{\"value\":" + heartRate + "}");
                     break;
@@ -244,7 +240,7 @@ namespace ObsHeartRateMonitor
             GroupBoxObs.IsEnabled = true;
             GroupBoxHttp.IsEnabled = true;
             CheckBoxReconnect.IsEnabled = true;
-            heartRateMonitor.NewSensorDataReceived -= HeartRateMonitor_NewSensorDataReceived;
+            heartRateMonitor!.NewSensorDataReceived -= HeartRateMonitor_NewSensorDataReceived;
             heartRateMonitor.SensorNotFound -= HeartRateMonitor_SensorNotFound;
             heartRateMonitor.Stop();
             logTimer.Stop();

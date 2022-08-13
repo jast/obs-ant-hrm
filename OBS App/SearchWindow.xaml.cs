@@ -41,9 +41,9 @@ namespace ObsHeartRateMonitor
             Dispatcher.BeginInvoke(new Action(() => { TextBoxSensor.Text = e.ToString(); }));
         }
 
-        private void SearchWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void SearchWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
         {
             heartRateMonitor.Stop();
-        }        
+        }
     }
 }
